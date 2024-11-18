@@ -1,0 +1,19 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; 
+}
+
+main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: rgb(15, 15, 15);
+}
+
+h1{
+  font-size: 5rem;
+  color: rgb(240, 240, 240);
+  font-family: 'Montserrat', sans-serif;
+}

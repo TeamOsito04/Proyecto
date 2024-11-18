@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mycontainer:
+    build: .
+    container_name: mycontainer
+    ports:
+      - "3000:3000"
+    depends_on:
+      - proyecto
+    environment:
+      - MONGO_URI=mongodb://alejandro1ro:dockerale@proyecto:27017/mydatabase
+
+  proyecto:
+    image: mongo
+    container_name: proyecto
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=alejandro1ro
+      - MONGO_INITDB_ROOT_PASSWORD=dockerale
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
