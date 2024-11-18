@@ -1,4 +1,4 @@
-name: Pipeline CI/CD
+name: CI Pipeline
 
 on:
   push:
@@ -9,11 +9,46 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      # Configurar el repositorio
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      # Configurar Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18 # Cambiar según la versión de Node.js que uses
+          cache: 'npm'
+
+      # Instalar dependencias
       - name: Install dependencies
         run: npm install
+
+      # Configurar MongoDB en un contenedor
+      - name: Set up MongoDB
+        uses: supercharge/mongodb-github-action@v1
+        with:
+          mongodb-version: '6.0' # Cambiar según tu versión de MongoDB
+          mongodb-replica-set: 'rs0'
+
+      # Ejecutar pruebas
       - name: Run tests
+        env:
+          NODE_ENV: test
         run: npm test
+
+      # Opcional: Publicar logs del proceso
+      - name: Upload Jest test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: jest-results
+          path: jest-report.xml
+
+      # Verificar linter (opcional)
+      - name: Run ESLint
+        run: npm run lint
